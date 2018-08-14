@@ -1,19 +1,20 @@
+import React, { Component } from "react";
 // Reducers
-import RootReducer from './index'
+import RootReducer from "./index";
 
 // Redux
-import { createStore, applyMiddleware } from 'redux'
-
+import { createStore, applyMiddleware, compose } from "redux";
+import { connect, Provider } from "react-redux";
 // Redux Middlewares
-import logger from 'redux-logger'
+import thunk from "redux-thunk";
+import createLogger from "redux-logger";
 
 // Redux Persist
-import { persistStore } from 'redux-persist'
+import { persistStore, autoRehydrate } from "redux-persist";
 
-const middleware = applyMiddleware()
-
+const middleware = [thunk];
 export default function configureStore() {
-  let store = createStore(RootReducer)
-  let persistor = persistStore(store)
-  return { persistor, store }
+  let store = compose(applyMiddleware(...middleware))(createStore)(RootReducer);
+  let persistor = persistStore(store);
+  return { persistor, store };
 }

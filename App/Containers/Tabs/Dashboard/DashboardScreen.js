@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import {
-  Image,
   Text,
   TouchableOpacity,
   Modal,
@@ -9,17 +8,19 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   Dimensions,
-  StyleSheet
+  StyleSheet,
+  Input
 } from "react-native";
 
-
 //CommonItems
-import { Card, CardSection } from '../../../Common';
+import { Card, CardSection } from "../../../Common";
+import { SearchBar } from "react-native-elements";
 
+import { fetchUserDetails } from "../../../Actions/userDetails";
 // Components
 import ListCircleIcon from "../../../Components/ListCircleIcon";
 
-import GitUserApi from '../../../services/GitUserApi'
+import GitUserApi from "../../../services/GitUserApi";
 
 // Theme
 import styled from "styled-components/native";
@@ -35,6 +36,7 @@ import {
   Paragraph
 } from "../../../Themes/Global";
 import LinearGradient from "react-native-linear-gradient";
+import { connect } from "react-redux";
 
 const ScreenHeaderNameWrapper = styled.View`
   flex-direction: row
@@ -43,72 +45,60 @@ const ScreenHeaderNameWrapper = styled.View`
   padding-top: 5%;
 `;
 
-const NOTIFICATION = [
-{
-NAME: "100-days-Of-ML-Code",
-DESCRIPTION: "100 days of ML Coding",
-},
-{
-NAME: "100-days-Of-ML-Code",
-DESCRIPTION: "100 days of ML Coding",
-},
-{
-NAME: "100-days-Of-ML-Code",
-DESCRIPTION: "100 days of ML Coding",
-},
-{
-NAME: "100-days-Of-ML-Code",
-DESCRIPTION: "100 days of ML Coding",
-},
-{
-NAME: "100-days-Of-ML-Code",
-DESCRIPTION: "100 days of ML Coding",
-}
-];
-
 class DashboardScreen extends Component {
-
   componentDidMount() {
-    const repoList = GitUserApi.getTrendingRepository()
-    if (repoList === undefined) {
-      console.log("Undefined JSON")
-    } else if (json.error) {
-      console.log("Error")
-    } else {
-      console.log(repoList)
-    }
+    this.props.dispatch(fetchUserDetails());
   }
 
   _renderHeaderName = () => {
     return (
       <ScreenHeaderNameWrapper>
-        <H2>Repositories</H2>
+        <H2>Search User</H2>
       </ScreenHeaderNameWrapper>
     );
   };
 
+  _renderSearchBar = () => {
+    return (
+      <SearchBar
+        lightTheme
+        placeholder="Search"
+        containerStyle={{
+          backgroundColor: "white",
+          marginTop: 10,
+          borderTopColor: "white"
+        }}
+        inputContainerStyle={{
+          backgroundColor: "#c1c1c1"
+        }}
+      />
+    );
+  };
   _navigate = data => {
     this.props.navigation.navigate(data, { data: data });
+  };
+
+  _renderMainContent = () => {
+    const { error, loading, users } = this.props;
+    if (error) {
+      return <div>Error! {error.message}</div>;
+    }
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
+    console.log(users);
   };
 
   render() {
     return (
       <ScrollView>
-        <ScreenWrapper style={{marginTop:10}}>
+        <ScreenWrapper style={{ marginTop: 10 }}>
           <ScreenPadder>
             {this._renderHeaderName()}
-            {NOTIFICATION.map((data, index) => {
-              return (
-                <ListCircleIcon
-                  key={index}
-                  name={data.NAME}
-                  description={data.DESCRIPTION}
-                  onPress={() => {
-                    this._navigate("RepositoryDetail");
-                  }}
-                />
-              );
-            })}
+            {this._renderSearchBar()}
+            {this._renderMainContent()}
           </ScreenPadder>
         </ScreenWrapper>
       </ScrollView>
@@ -116,17 +106,23 @@ class DashboardScreen extends Component {
   }
 }
 
-export default DashboardScreen;
+const mapStateToProps = state => ({
+  users: state.users.users,
+  loading: state.users.loading,
+  error: state.users.error
+});
+
+export default connect(mapStateToProps)(DashboardScreen);
 
 const styles = StyleSheet.create({
-  blockStyle:{
+  blockStyle: {
     paddingBottom: 50,
     borderBottomWidth: 0,
-    width:(Dimensions.get('window').width/2)-20,
-    height:Dimensions.get('window').height/4,
-    padding:15
+    width: Dimensions.get("window").width / 2 - 20,
+    height: Dimensions.get("window").height / 4,
+    padding: 15
   },
-  columnStyle:{
-    borderBottomWidth: 0,
+  columnStyle: {
+    borderBottomWidth: 0
   }
 });
