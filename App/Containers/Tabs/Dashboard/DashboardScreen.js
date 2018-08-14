@@ -46,7 +46,7 @@ const ScreenHeaderNameWrapper = styled.View`
 `;
 
 class DashboardScreen extends Component {
-  componentDidMount() {
+  componentWillMount() {
     this.props.dispatch(fetchUserDetails());
   }
 
@@ -74,10 +74,27 @@ class DashboardScreen extends Component {
       />
     );
   };
+  _onClick = async () => {
+    const json = await GitUserApi.getUsers();
+    if (json === undefined) {
+      console.log("Undefined JSON");
+    } else if (json.error) {
+      console.log("Error");
+    } else {
+      console.log(json);
+    }
+  };
   _navigate = data => {
     this.props.navigation.navigate(data, { data: data });
   };
 
+  _renderButton = () => {
+    return (
+      <TouchableOpacity onPress={this._onClick}>
+        <Text>Click</Text>
+      </TouchableOpacity>
+    );
+  };
   _renderMainContent = () => {
     const { error, loading, users } = this.props;
     if (error) {
@@ -98,6 +115,7 @@ class DashboardScreen extends Component {
           <ScreenPadder>
             {this._renderHeaderName()}
             {this._renderSearchBar()}
+            {this._renderButton()}
             {this._renderMainContent()}
           </ScreenPadder>
         </ScreenWrapper>
@@ -107,7 +125,7 @@ class DashboardScreen extends Component {
 }
 
 const mapStateToProps = state => ({
-  users: state.users.users,
+  users: state.users,
   loading: state.users.loading,
   error: state.users.error
 });

@@ -19,6 +19,11 @@ const GitUserApi = {
       username,
       password
     });
+  },
+
+  getUsers: async () => {
+    const url1 = "https://api.github.com/users/shweta-bavishi";
+    return await request(url1, { mathod: "GET" });
   }
 };
 

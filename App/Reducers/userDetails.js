@@ -5,7 +5,7 @@ import {
 } from "../Actions/userDetails.js";
 
 const initialState = {
-  users: null,
+  users: { id: 1 },
   loading: false,
   error: null
 };
