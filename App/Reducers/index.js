@@ -1,5 +1,5 @@
 import { persistCombineReducers } from "redux-persist";
-import storage from "redux-persist/lib/storage"; // default: localStorage if web, AsyncStorage if react-native
+import storage from "redux-persist/lib/storage";
 
 import Nav from "./Nav";
 import Auth from "./Auth";

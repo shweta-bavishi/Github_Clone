@@ -1,19 +1,19 @@
 // Connect this file to the redux
-import React, { Component } from 'react'
-import { StyleSheet, View, StatusBar } from 'react-native'
-import { SafeAreaView } from 'react-navigation'
-
-import { Colors } from '../Themes/Theme'
+import React, { Component } from "react";
+import { StyleSheet, StatusBar } from "react-native";
+import { SafeAreaView } from "react-navigation";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/es/integration/react";
+import { Colors } from "../Themes/Theme";
 
 // Redux
-import { Provider } from 'react-redux'
-import ReduxNavigation from '../Navigation/ReduxNavigation'
-import configureStore from '../Reducers/CreateStore'
+
+import ReduxNavigation from "../Navigation/ReduxNavigation";
+import configureStore from "../Reducers/CreateStore";
 
 // Persist
-import { PersistGate } from 'redux-persist/es/integration/react'
 
-const { store, persistor } = configureStore()
+const { store, persistor } = configureStore();
 
 class RootContainer extends Component {
   componentWillMount() {}
@@ -21,15 +21,14 @@ class RootContainer extends Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <StatusBar
-        barStyle="light-content" />
+        <StatusBar barStyle="light-content" />
         {/* <NotificationsBar
           notifications={notifications}
           clearNotifications={clearNotifications}
         />*/}
         <ReduxNavigation />
       </SafeAreaView>
-    )
+    );
   }
 }
 
@@ -38,7 +37,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.GithubPrimary
   }
-})
+});
 
 /**
  * Provides an entry point into our application.  Both index.ios.js and index.android.js
@@ -57,8 +56,8 @@ class App extends Component {
           <RootContainer />
         </PersistGate>
       </Provider>
-    )
+    );
   }
 }
 
-export default App
+export default App;

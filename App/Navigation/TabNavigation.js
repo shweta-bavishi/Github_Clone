@@ -4,29 +4,20 @@ import {
   TabNavigator,
   StackNavigator,
   TabBarBottom,
-  DrawerNavigator,
   NavigationActions
 } from "react-navigation";
-
+// Icons
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 // Theme
-import { Colors, width } from "../Themes/Theme";
+import { Colors } from "../Themes/Theme";
 
 // Screens
 import DashboardScreen from "../Containers/Tabs/Dashboard";
-import RepositoryDetail from "../Containers/Tabs/RepositoryDetail";
-//import AlertGraphDetail from '../Containers/Tabs/Dashboard/AlertGraph'
-
-// Icons
-import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const DashboardStack = StackNavigator(
   {
     DashboardScreen: {
       screen: DashboardScreen
-    },
-    RepositoryDetail: {
-      screen: RepositoryDetail
     }
   },
   {

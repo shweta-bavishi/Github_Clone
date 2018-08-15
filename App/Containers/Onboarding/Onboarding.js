@@ -1,45 +1,45 @@
-import React, {Component} from 'react'
-import {TouchableOpacity, Text} from 'react-native'
-import { Icon } from 'react-native-elements';
+import React, { Component } from "react";
+import { View } from "react-native";
+import styled from "styled-components/native";
+// Swiper
+import Swiper from "react-native-swiper";
 // Theme
-import {Colors} from '../../Themes/Theme'
-import {ScreenWrapper} from '../../Themes/Global'
-import styled from 'styled-components/native'
+import { Colors } from "../../Themes/Theme";
+
+import { ScreenWrapper } from "../../Themes/Global";
 
 // Constants
-import {ONBOARDING} from '../../Constants/Constants'
+import { ONBOARDING } from "../../Constants/Constants";
 
 // Components
-import GradientButton from '../../Components/GradientButton'
-import OnboardingScreen from '../../Components/Onboarding'
-
-// Swiper
-import Swiper from 'react-native-swiper'
+import GradientButton from "../../Components/GradientButton";
+import OnboardingScreen from "../../Components/Onboarding";
 
 const ScreenSwiperWrapper = styled.View`
-  flex: 0.8
-`
+  flex: 0.8;
+`;
 const ScreenStaticWrapper = styled.View`
   flex: 0.2;
   justify-content: center;
-  align-self: center
-`
+  align-self: center;
+`;
 const Dot = styled.View`
   width: 6;
   height: 6;
   margin-right: 6;
   margin-left: 6;
   border-radius: 6;
-  background-color: ${props => props.active ? Colors.GithubPrimary : Colors.Grey2}
-  `
-  const RightContainer = styled.TouchableOpacity`
+  background-color: ${props =>
+    props.active ? Colors.GithubPrimary : Colors.Grey2};
+`;
+const RightContainer = styled.TouchableOpacity`
   alignItems:flex-end;
   alignSelf:flex-end;
   justifyContent:flex-end;
   paddingRight:30;
   paddingTop: 30;
   flex:0.5
-  `
+  `;
   const LeftContainer = styled.TouchableOpacity`
   alignItems:flex-start;
   alignSelf:flex-start;
@@ -47,64 +47,70 @@ const Dot = styled.View`
   paddingLeft:30;
   paddingTop: 30;
   flex:0.5
-  `
-  const TopContainer = styled.View`
-  flexDirection:row
-  `
-  const LoginText = styled.Text`
+  `;
+
+const LoginText = styled.Text`
   fontSize: 18;
-  color:#969696
-  `
+  color: #969696;
+`;
 
 class Onboarding extends Component {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       slideIndex: 0
-    }
+    };
   }
 
-  _slideChange = (index) => {
-    this.setState({slideIndex: index})
-  }
+  _slideChange = index => {
+    this.setState({ slideIndex: index });
+  };
 
   _navigate = () => {
-    if(this.state.slideIndex !== 3) {
-      this.refs.swiper.scrollBy(1)
+    if (this.state.slideIndex !== 3) {
+      this.refs.swiper.scrollBy(1);
     } else {
-      this.props.navigation.navigate('AppMainScreen')
+      this.props.navigation.navigate("AppMainScreen");
     }
-  }
+  };
   _navigateToLogin = data => {
-      this.props.navigation.navigate('AppMainScreen');
+    this.props.navigation.navigate("AppMainScreen");
   };
 
   _renderSwiper = () => {
     return (
       <ScreenSwiperWrapper>
-      <TopContainer>
-        <LeftContainer>
-        </LeftContainer>
-        <RightContainer onPress={() => {
-                this._navigateToLogin();
-              }}>
-          <LoginText>Login</LoginText>
-        </RightContainer>
-      </TopContainer>
+        <View style={{ flexDirection: "row" }}>
+          <LeftContainer />
+          <RightContainer
+            onPress={() => {
+              this._navigateToLogin();
+            }}
+          >
+            <LoginText>Login</LoginText>
+          </RightContainer>
+        </View>
         <Swiper
-          ref='swiper'
+          ref="swiper"
           loop={false}
-          dot={<Dot/>}
-          activeDot={<Dot active/>}
+          dot={<Dot />}
+          activeDot={<Dot active />}
           onIndexChanged={this._slideChange}
         >
           {ONBOARDING.map((data, index) => {
-            return <OnboardingScreen key={index} index={index} name={data.NAME} description={data.TEXT}/>
+            return (
+              <OnboardingScreen
+                key={index}
+                index={index}
+                name={data.NAME}
+                description={data.TEXT}
+              />
+            );
           })}
         </Swiper>
       </ScreenSwiperWrapper>
-    )
-  }
+    );
+  };
 
   _renderButton = () => {
     return (
@@ -113,23 +119,23 @@ class Onboarding extends Component {
           {ONBOARDING[this.state.slideIndex].BUTTON_NAME}
         </GradientButton>
       </ScreenStaticWrapper>
-    )
-  }
+    );
+  };
 
-  render () {
+  render() {
     return (
       <ScreenWrapper>
         {this._renderSwiper()}
         {this._renderButton()}
       </ScreenWrapper>
-    )
+    );
   }
 }
 const styles = {
-  loginText:{
+  loginText: {
     fontSize: 18,
-    color: '#969696',
-  },
-}
+    color: "#969696"
+  }
+};
 
-export default Onboarding
+export default Onboarding;

@@ -1,4 +1,3 @@
-import axios from "axios";
 export const FETCH_USER_BEGIN = "FETCH_USER_BEGIN";
 export const FETCH_USER_SUCCESS = "FETCH_USER_SUCCESS";
 export const FETCH_USER_FAILURE = "FETCH_USER_FAILURE";
@@ -7,27 +6,27 @@ export const fetchUserBegin = () => ({
   type: FETCH_USER_BEGIN
 });
 
-export const fetchUserSuccess = id => ({
+export const fetchUserSuccess = json => ({
   type: FETCH_USER_SUCCESS,
-  payload: id
+  payload: json
 });
 
 export const fetchUserFailure = error => ({
   type: FETCH_USER_FAILURE,
-  payload: error
+  payload: { error }
 });
 
-export function fetchUserDetails() {
-  return async dispatch => {
-    try {
-      const response = await axios.get(
-        "https://api.github.com/users/shweta-bavishi"
-      );
-      consle.log(response);
-      return fetchUserSuccess(response);
-    } catch (error) {
-      return fetchUserFailure(error);
-    }
+export function fetchUserDetails(text) {
+  return dispatch => {
+    dispatch(fetchUserBegin());
+    return fetch(`https://api.github.com/users/${text}`)
+      .then(handleErrors)
+      .then(res => res.json())
+      .then(json => {
+        dispatch(fetchUserSuccess(json));
+        return json;
+      })
+      .catch(error => dispatch(fetchUserFailure(error)));
   };
 }
 

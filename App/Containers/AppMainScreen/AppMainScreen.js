@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { Image, ScrollView, View, Dimensions } from "react-native";
-import { TabViewAnimated, TabBar, SceneMap } from "react-native-tab-view";
+import { TabViewAnimated, TabBar } from "react-native-tab-view";
 import LinearGradient from "react-native-linear-gradient";
-
-// Image
-import { LOGO } from "../../Assets/index";
 
 // Theme
 import styled from "styled-components/native";
-import { ScreenWrapper, ScreenPadder } from "../../Themes/Global";
+// Image
+import { LOGO } from "../../Assets/index";
+
+import { ScreenWrapper } from "../../Themes/Global";
 import { Colors } from "../../Themes/Theme";
 
 // Components
@@ -25,22 +25,13 @@ const TabsWrapper = styled.View`
   flex: 0.8;
   justify-content: center;
 `;
-const LeftContainer = styled.TouchableOpacity`
-alignItems:flex-start;
-alignSelf:flex-start;
-justifyContent:flex-start;
-paddingLeft:30;
-paddingTop: 30;
-flex:0.5
-`
+
 class AppMainScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       index: 0,
-      routes: [
-        { key: "login", title: "Login" }
-      ]
+      routes: [{ key: "login", title: "Login" }]
     };
   }
 
@@ -64,27 +55,23 @@ class AppMainScreen extends Component {
     }
   };
 
-  _renderLogo = () => {
-    return (
-      <LogoWrapper>
-        <Image source={LOGO} style={{ flex: 1 }} resizeMode={"contain"} />
-      </LogoWrapper>
-    );
-  };
+  _renderLogo = () => (
+    <LogoWrapper>
+      <Image source={LOGO} style={{ flex: 1 }} resizeMode={"contain"} />
+    </LogoWrapper>
+  );
 
-  _renderTabs = () => {
-    return (
-      <TabsWrapper>
-          <TabViewAnimated
-            style={{ flex: 1.0, borderRadius: 5}}
-            navigationState={this.state}
-            renderScene={this._renderScene}
-            renderHeader={this._renderHeader}
-            onIndexChange={this._handleIndexChange}
-          />
-      </TabsWrapper>
-    );
-  };
+  _renderTabs = () => (
+    <TabsWrapper>
+      <TabViewAnimated
+        style={{ flex: 1.0, borderRadius: 5 }}
+        navigationState={this.state}
+        renderScene={this._renderScene}
+        renderHeader={this._renderHeader}
+        onIndexChange={this._handleIndexChange}
+      />
+    </TabsWrapper>
+  );
 
   render() {
     return (
@@ -108,16 +95,17 @@ class AppMainScreen extends Component {
   }
 }
 
-const styles={
-  containerStyle:{
-    height: Dimensions.get('window').height-Dimensions.get('window').height/4,
-    shadowColor: '#000',
+const styles = {
+  containerStyle: {
+    height:
+      Dimensions.get("window").height - Dimensions.get("window").height / 4,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     elevation: 1,
     marginLeft: 30,
     marginRight: 30
   }
-}
+};
 
 export default AppMainScreen;

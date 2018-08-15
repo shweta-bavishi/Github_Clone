@@ -1,42 +1,20 @@
 import React, { Component } from "react";
 import {
-  Text,
-  TouchableOpacity,
-  Modal,
-  View,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
   ScrollView,
-  Dimensions,
-  StyleSheet,
-  Input
+  ActivityIndicator
 } from "react-native";
 
-//CommonItems
-import { Card, CardSection } from "../../../Common";
 import { SearchBar } from "react-native-elements";
-
+import { throttle } from "throttle-debounce";
+import styled from "styled-components/native";
+import { connect } from "react-redux";
 import { fetchUserDetails } from "../../../Actions/userDetails";
 // Components
 import ListCircleIcon from "../../../Components/ListCircleIcon";
 
-import GitUserApi from "../../../services/GitUserApi";
-
 // Theme
-import styled from "styled-components/native";
-import { Colors } from "../../../Themes/Theme";
-import {
-  ScreenWrapper,
-  H2,
-  H5,
-  ScreenPadder,
-  ParagraphSmall,
-  ListWrapper,
-  ListItem,
-  Paragraph
-} from "../../../Themes/Global";
-import LinearGradient from "react-native-linear-gradient";
-import { connect } from "react-redux";
+
+import { ScreenWrapper, H2, ScreenPadder } from "../../../Themes/Global";
 
 const ScreenHeaderNameWrapper = styled.View`
   flex-direction: row
@@ -46,66 +24,74 @@ const ScreenHeaderNameWrapper = styled.View`
 `;
 
 class DashboardScreen extends Component {
-  componentWillMount() {
-    this.props.dispatch(fetchUserDetails());
+  constructor(props) {
+    super(props);
+    this.state = {
+      text: ""
+    };
+    this.autocompleteSearchThrottled = throttle(5000, this.autocompleteSearch);
+  }
+  componentWillUpdate() {
+    const _searches = this.state._searches || [];
+    const temp = _searches.splice(-1);
+    if (temp.length !== 0 && temp[0].length !== 1) {
+      this.props.dispatch(fetchUserDetails(temp[0]));
+    }
   }
 
-  _renderHeaderName = () => {
-    return (
-      <ScreenHeaderNameWrapper>
-        <H2>Search User</H2>
-      </ScreenHeaderNameWrapper>
-    );
+  onChange = text => {
+    this.setState(text, () => {
+      this.autocompleteSearchThrottled(this.state.text);
+    });
   };
+  autocompleteSearch = text => {
+    this._fetch(text);
+  };
+  _fetch = text => {
+    const _searches = this.state._searches || [];
+    _searches.push(text);
+    this.setState({ _searches });
+  };
+  renderHeaderName = () => (
+    <ScreenHeaderNameWrapper>
+      <H2>Search User</H2>
+    </ScreenHeaderNameWrapper>
+  );
+  renderSearchBar = () => (
+    <SearchBar
+      lightTheme
+      placeholder="Search"
+      autoCapitalize="none"
+      autoCorrect={false}
+      onChangeText={text => this.onChange({ text })}
+      cancelIcon={{ type: "font-awesome", name: "chevron-left" }}
+      containerStyle={{
+        backgroundColor: "white",
+        marginTop: 10,
+        borderTopColor: "white"
+      }}
+      inputContainerStyle={{
+        backgroundColor: "#c1c1c1"
+      }}
+    />
+  );
 
-  _renderSearchBar = () => {
-    return (
-      <SearchBar
-        lightTheme
-        placeholder="Search"
-        containerStyle={{
-          backgroundColor: "white",
-          marginTop: 10,
-          borderTopColor: "white"
-        }}
-        inputContainerStyle={{
-          backgroundColor: "#c1c1c1"
-        }}
-      />
-    );
-  };
-  _onClick = async () => {
-    const json = await GitUserApi.getUsers();
-    if (json === undefined) {
-      console.log("Undefined JSON");
-    } else if (json.error) {
-      console.log("Error");
-    } else {
-      console.log(json);
-    }
-  };
-  _navigate = data => {
-    this.props.navigation.navigate(data, { data: data });
-  };
-
-  _renderButton = () => {
-    return (
-      <TouchableOpacity onPress={this._onClick}>
-        <Text>Click</Text>
-      </TouchableOpacity>
-    );
-  };
-  _renderMainContent = () => {
-    const { error, loading, users } = this.props;
-    if (error) {
-      return <div>Error! {error.message}</div>;
-    }
+  renderMainContent = () => {
+    const { loading, users } = this.props;
 
     if (loading) {
-      return <div>Loading...</div>;
+      return <ActivityIndicator />;
     }
-
-    console.log(users);
+    return (
+      <ListCircleIcon
+        icon={users.users.avatar_url == null ? "" : users.users.avatar_url}
+        name={users.users.name}
+        description={users.users.email == null ? "NA" : users.users.email}
+        company={users.users.company == null ? "NA" : users.users.company}
+        followers={users.users.followers == null ? "0" : users.users.followers}
+        following={users.users.following == null ? "0" : users.users.following}
+      />
+    );
   };
 
   render() {
@@ -113,10 +99,9 @@ class DashboardScreen extends Component {
       <ScrollView>
         <ScreenWrapper style={{ marginTop: 10 }}>
           <ScreenPadder>
-            {this._renderHeaderName()}
-            {this._renderSearchBar()}
-            {this._renderButton()}
-            {this._renderMainContent()}
+            {this.renderHeaderName()}
+            {this.renderSearchBar()}
+            {this.renderMainContent()}
           </ScreenPadder>
         </ScreenWrapper>
       </ScrollView>
@@ -131,16 +116,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(DashboardScreen);
-
-const styles = StyleSheet.create({
-  blockStyle: {
-    paddingBottom: 50,
-    borderBottomWidth: 0,
-    width: Dimensions.get("window").width / 2 - 20,
-    height: Dimensions.get("window").height / 4,
-    padding: 15
-  },
-  columnStyle: {
-    borderBottomWidth: 0
-  }
-});

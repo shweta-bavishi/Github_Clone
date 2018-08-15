@@ -1,36 +1,40 @@
-import React, {Component} from 'react'
-//import { LinearGradient } from 'react-native-linear-gradient'
-import {NavigationActions} from 'react-navigation'
+import React, { Component } from "react";
+import { NavigationActions } from "react-navigation";
 
-import styled from 'styled-components/native'
-import {Colors} from '../../Themes/Theme'
+import styled from "styled-components/native";
 
 // Assets
-import {SPLASH_LOGO} from '../../Assets'
+import { SPLASH_LOGO } from "../../Assets";
 
 const Logo = styled.Image`
-  flex: 1
-`
+  flex: 1;
+`;
 
 export default class LaunchScreen extends Component {
-
+  componentDidMount() {
+    setTimeout(() => {
+      this._navigateTo("StartScreen");
+    }, 2000);
+  }
   _navigateTo = () => {
     const actionToDispatch = NavigationActions.reset({
       index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'Onboarding' })],
+      actions: [NavigationActions.navigate({ routeName: "Onboarding" })]
     });
     this.props.navigation.dispatch(actionToDispatch);
-  }
-
-  componentDidMount () {
-    setTimeout( () => {
-      this._navigateTo('StartScreen')
-    },2000);
-  }
-
-  render () {
+  };
+  render() {
     return (
-        <Logo source={SPLASH_LOGO} resizeMode={'contain'} style={{alignItems: 'center', flex: 1, justifyContent: 'center', alignSelf: 'center'}} />
-    )
+      <Logo
+        source={SPLASH_LOGO}
+        resizeMode={"contain"}
+        style={{
+          alignItems: "center",
+          flex: 1,
+          justifyContent: "center",
+          alignSelf: "center"
+        }}
+      />
+    );
   }
 }

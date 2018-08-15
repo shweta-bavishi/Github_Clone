@@ -1,0 +1,8 @@
+{
+  "extends": "rallycoding",
+  "arrow-body-style": ["error", "as-needed"],
+  "globals": { "fetch": false, "error": false ,"Headers": false},
+  "rules": {
+    "quotes": [2, "double", { "avoidEscape": true }]
+  }
+}
