@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Image, ScrollView, View, Dimensions } from "react-native";
 import { TabViewAnimated, TabBar } from "react-native-tab-view";
-import LinearGradient from "react-native-linear-gradient";
 
 // Theme
 import styled from "styled-components/native";
@@ -76,20 +75,12 @@ class AppMainScreen extends Component {
   render() {
     return (
       <ScreenWrapper style={{ height: 600 }}>
-        <LinearGradient
-          start={{ x: 0.0, y: 1.0 }}
-          end={{ x: 1.0, y: 1.0 }}
-          locations={[0, 1]}
-          colors={[Colors.White, Colors.Background]}
-          style={{ flex: 1 }}
-        >
           <ScrollView>
             <View style={{ height: 160, justifyContent: "flex-end" }}>
               {this._renderLogo()}
             </View>
             <View style={styles.containerStyle}>{this._renderTabs()}</View>
           </ScrollView>
-        </LinearGradient>
       </ScreenWrapper>
     );
   }

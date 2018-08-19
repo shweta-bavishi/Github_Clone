@@ -1,5 +1,12 @@
 const initialState = {
-  users: {},
+  users: {
+    icon: "https://www.feedbackhall.com/users/745",
+    name: "Undefined",
+    email: "NA",
+    company: "NA",
+    followers: 0,
+    following: 0
+  },
   loading: false,
   error: null
 };

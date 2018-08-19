@@ -13,7 +13,6 @@ import { fetchUserDetails } from "../../../Actions/userDetails";
 import ListCircleIcon from "../../../Components/ListCircleIcon";
 
 // Theme
-
 import { ScreenWrapper, H2, ScreenPadder } from "../../../Themes/Global";
 
 const ScreenHeaderNameWrapper = styled.View`
@@ -29,7 +28,7 @@ class DashboardScreen extends Component {
     this.state = {
       text: ""
     };
-    this.autocompleteSearchThrottled = throttle(5000, this.autocompleteSearch);
+    this.autocompleteSearchThrottled = throttle(3000, this.autocompleteSearch);
   }
   componentWillUpdate() {
     const _searches = this.state._searches || [];
@@ -84,12 +83,12 @@ class DashboardScreen extends Component {
     }
     return (
       <ListCircleIcon
-        icon={users.users.avatar_url == null ? "" : users.users.avatar_url}
+        icon={users.users.avatar_url == null ? "https://www.feedbackhall.com/users/745" : users.users.avatar_url}
         name={users.users.name}
         description={users.users.email == null ? "NA" : users.users.email}
         company={users.users.company == null ? "NA" : users.users.company}
-        followers={users.users.followers == null ? "0" : users.users.followers}
-        following={users.users.following == null ? "0" : users.users.following}
+        followers={users.users.followers}
+        following={users.users.following}
       />
     );
   };

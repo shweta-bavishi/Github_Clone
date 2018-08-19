@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 
 import styled from 'styled-components/native'
 import Button from 'apsl-react-native-button'
-import LinearGradient from 'react-native-linear-gradient'
 
 // Theme
 import { Colors } from '../Themes/Theme'
@@ -27,15 +26,7 @@ class GradientButton extends Component {
         style={[Styles.button, this.props.style]}
         onPress={this.props.onPress}
       >
-        <LinearGradient
-          start={{ x: 0.0, y: 1.0 }}
-          end={{ x: 1.0, y: 1.0 }}
-          locations={[0, 1]}
-          colors={[Colors.GithubPrimary, Colors.GithubSecondary]}
-          style={Styles.button}
-        >
           <ButtonText>{this.props.children}</ButtonText>
-        </LinearGradient>
       </Button>
     )
   }
@@ -43,7 +34,7 @@ class GradientButton extends Component {
 
 const Styles = StyleSheet.create({
   button: {
-    backgroundColor: Colors.Transparent,
+    backgroundColor: Colors.GithubPrimary,
     borderWidth: 0,
     borderRadius: 21.66,
     height: 43.33,
